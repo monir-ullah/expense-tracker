@@ -25,6 +25,7 @@ import {
   listStyles 
 } from '../styles/globalStyles';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {bdtFormatter , dhakaDateTimeFormatter} from "../assets/utils/utils"
 
 export default function Dashboard() {
   const navigation = useNavigation();
@@ -34,23 +35,7 @@ export default function Dashboard() {
   const [balance, setBalance] = useState(34567.90);
   const [showBalance, setShowBalance] = useState(true);
 
-  const dhakaDateTimeFormatter = new Intl.DateTimeFormat('en-BD', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true,
-    timeZone: 'Asia/Dhaka',
-  });
-
-  const bdtFormatter = new Intl.NumberFormat('en-BD', {
-    style: 'currency',
-    currency: 'BDT',
-    currencyDisplay: 'symbol',
-    minimumFractionDigits: 2,
-  });
+ 
 
 
   const isFocused = useIsFocused();
@@ -144,12 +129,15 @@ export default function Dashboard() {
 
   const screenWidth = Dimensions.get("window").width;
 
-  const renderActionButton = (icon, label) => (
-    <TouchableOpacity style={styles.actionButton}>
+  const renderActionButton = (icon, label, path) => (
+    <TouchableOpacity 
+      style={styles.actionButton}
+      onPress={() => path && navigation.navigate(path)}
+    >
       <View style={styles.actionButtonIcon}>
-        <Feather name={icon} size={24} color="#000" />
+        <Feather name={icon} size={24} color={theme.colors.text} />
       </View>
-      <Text style={styles.actionButtonText}>{label}</Text>
+      <Text style={[styles.actionButtonText, { color: theme.colors.muted }]}>{label}</Text>
     </TouchableOpacity>
   );
 
@@ -181,17 +169,17 @@ export default function Dashboard() {
 
       {/* Action Buttons */}
       <View style={[styles.actionButtonsContainer, { backgroundColor: theme.colors.card }]}>
-        {renderActionButton("arrow-up", "Send")}
-        {renderActionButton("plus", "Add funds")}
-        {renderActionButton("arrow-down", "Request")}
-        {renderActionButton("more-horizontal", "More")}
+        {renderActionButton("arrow-up", "Expense", "Expense")}
+        {renderActionButton("credit-card", "Wallet", "Wallet")}
+        {renderActionButton("arrow-down", "Income", "Income")}
+        {renderActionButton("more-horizontal", "More", "Setting")}
       </View>
 
       {/* Transactions Header */}
       <View style={styles.transactionsHeader}>
         <Text style={[styles.transactionsTitle, { color: theme.colors.text }]}>Transactions</Text>
         <TouchableOpacity>
-          <Text style={[styles.seeAllText, { color: theme.colors.muted }]}>see all</Text>
+          <Text style={[styles.seeAllText, { color: theme.colors.muted }]}>See all</Text>
         </TouchableOpacity>
       </View>
 
