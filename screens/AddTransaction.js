@@ -7,12 +7,15 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { saveTransaction, updateTransaction } from "../storage/transactionStorage";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {
+  saveTransaction,
+  updateTransaction,
+} from "../storage/transactionStorage";
 import { Screen } from "../styles/Screen";
 import { Feather } from "@expo/vector-icons";
 import { colors, layout } from "../styles/globalStyles";
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from "../context/ThemeContext";
 
 export default function AddTransaction({ navigation, route }) {
   const { theme } = useTheme();
@@ -42,7 +45,10 @@ export default function AddTransaction({ navigation, route }) {
     }
 
     const transactionData = {
-      id: route?.params?.edit && route?.params?.transaction?.id ? route.params.transaction.id : Date.now(),
+      id:
+        route?.params?.edit && route?.params?.transaction?.id
+          ? route.params.transaction.id
+          : Date.now(),
       amount: parseFloat(amount),
       description,
       date: date.toISOString(),
@@ -76,9 +82,9 @@ export default function AddTransaction({ navigation, route }) {
     if (route?.params?.edit && route?.params?.transaction) {
       const t = route.params.transaction;
       setAmount(String(t.amount));
-      setDescription(t.description || '');
+      setDescription(t.description || "");
       setDate(t.date ? new Date(t.date) : new Date());
-      setType(t.type || 'expense');
+      setType(t.type || "expense");
     }
   }, [route?.params]);
 
@@ -86,7 +92,9 @@ export default function AddTransaction({ navigation, route }) {
     <Screen>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>Add Transaction</Text>
+        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
+          Add Transaction
+        </Text>
 
         <TouchableOpacity onPress={onSave}>
           <Feather name="check" size={24} color={theme.colors.primary} />
@@ -98,19 +106,29 @@ export default function AddTransaction({ navigation, route }) {
         <TouchableOpacity
           style={[
             styles.typeButton,
-            { backgroundColor: type === "expense" ? theme.colors.dangerLight : theme.colors.card },
+            {
+              backgroundColor:
+                type === "expense"
+                  ? theme.colors.dangerLight
+                  : theme.colors.card,
+            },
           ]}
           onPress={() => setType("expense")}
         >
           <Feather
             name="arrow-up"
             size={20}
-            color={type === "expense" ? theme.colors.danger : theme.colors.muted}
+            color={
+              type === "expense" ? theme.colors.danger : theme.colors.muted
+            }
           />
           <Text
             style={[
               styles.typeButtonText,
-              { color: type === "expense" ? theme.colors.danger : theme.colors.muted },
+              {
+                color:
+                  type === "expense" ? theme.colors.danger : theme.colors.muted,
+              },
             ]}
           >
             Expense
@@ -120,7 +138,12 @@ export default function AddTransaction({ navigation, route }) {
         <TouchableOpacity
           style={[
             styles.typeButton,
-            { backgroundColor: type === "income" ? theme.colors.accent + '20' : theme.colors.card },
+            {
+              backgroundColor:
+                type === "income"
+                  ? theme.colors.accent + "20"
+                  : theme.colors.card,
+            },
           ]}
           onPress={() => setType("income")}
         >
@@ -132,7 +155,10 @@ export default function AddTransaction({ navigation, route }) {
           <Text
             style={[
               styles.typeButtonText,
-              { color: type === "income" ? theme.colors.accent : theme.colors.muted },
+              {
+                color:
+                  type === "income" ? theme.colors.accent : theme.colors.muted,
+              },
             ]}
           >
             Income
@@ -142,7 +168,9 @@ export default function AddTransaction({ navigation, route }) {
 
       {/* Amount Input */}
       <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
-        <Text style={[styles.label, { color: theme.colors.muted }]}>Amount</Text>
+        <Text style={[styles.label, { color: theme.colors.muted }]}>
+          Amount
+        </Text>
         <TextInput
           keyboardType="numeric"
           placeholder="0.00"
@@ -155,7 +183,9 @@ export default function AddTransaction({ navigation, route }) {
 
       {/* Description Input */}
       <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
-        <Text style={[styles.label, { color: theme.colors.muted }]}>Description</Text>
+        <Text style={[styles.label, { color: theme.colors.muted }]}>
+          Description
+        </Text>
         <TextInput
           placeholder="What's this transaction for?"
           placeholderTextColor={theme.colors.muted}
@@ -167,8 +197,13 @@ export default function AddTransaction({ navigation, route }) {
       </View>
 
       {/* Date Picker */}
-      <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.card }]} onPress={() => setShowPicker(true)}>
-        <Text style={[styles.label, { color: theme.colors.muted }]}>Date & Time</Text>
+      <TouchableOpacity
+        style={[styles.card, { backgroundColor: theme.colors.card }]}
+        onPress={() => setShowPicker(true)}
+      >
+        <Text style={[styles.label, { color: theme.colors.muted }]}>
+          Date & Time
+        </Text>
         <View style={styles.dateRow}>
           <Feather name="calendar" size={20} color={theme.colors.muted} />
           <Text style={[styles.dateText, { color: theme.colors.text }]}>
@@ -178,17 +213,26 @@ export default function AddTransaction({ navigation, route }) {
       </TouchableOpacity>
 
       {showPicker && (
-        <DateTimePicker
-          value={date}
+        <DateTimePickerModal
+          isVisible={showPicker}
           mode="datetime"
-          display="default"
-          onChange={onChangeDate}
+          date={date}
+          onConfirm={(date) => {
+            setShowPicker(false);
+            setDate(date);
+          }}
+          onCancel={() => setShowPicker(false)}
         />
       )}
 
       {/* Save Button */}
-      <TouchableOpacity style={[styles.saveButton, { backgroundColor: theme.colors.accent }]} onPress={onSave}>
-        <Text style={[styles.saveButtonText, { color: theme.colors.card }]}>Save Transaction</Text>
+      <TouchableOpacity
+        style={[styles.saveButton, { backgroundColor: theme.colors.accent }]}
+        onPress={onSave}
+      >
+        <Text style={[styles.saveButtonText, { color: theme.colors.card }]}>
+          Save Transaction
+        </Text>
       </TouchableOpacity>
     </Screen>
   );
@@ -201,7 +245,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
     marginBottom: 20,
-    marginTop: -30
+    marginTop: -30,
   },
   headerTitle: {
     fontSize: 24,

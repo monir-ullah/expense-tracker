@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "BankExpenseTracker",
+    "name": "Bank Expense Tracker",
     "slug": "BankExpenseTracker",
     "version": "1.0.0",
+    "entryPoint": "index.js",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,13 +21,27 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.mullah725.BankExpenseTracker"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "react-native-vector-image"
-    ]
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4b8cea1f-74da-4d3e-ac6e-e0273da38ee4"
+      }
+    }
   }
 }

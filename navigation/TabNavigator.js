@@ -7,8 +7,9 @@ import Settings from "../screens/Settings";
 import { Feather, Octicons, MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "../context/ThemeContext";
 import ExpensePage from "../screens/ExpensePage";
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 import IncomePage from "../screens/IncomePage";
+import Analytics from "../screens/Analytics";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -89,7 +90,7 @@ export const CustomTabBarIcon = ({ focused, icon, theme }) => (
   </View>
 );
 
- export function TabNavigator() {
+export function TabNavigator() {
   const { theme } = useTheme();
 
   return (
@@ -143,7 +144,7 @@ export const CustomTabBarIcon = ({ focused, icon, theme }) => (
       />
       <Tab.Screen
         name="Analytics"
-        component={Dashboard}
+        component={Analytics}
         options={{
           tabBarIcon: ({ focused }) => (
             <CustomTabBarIcon
@@ -163,7 +164,6 @@ export const CustomTabBarIcon = ({ focused, icon, theme }) => (
           ),
         }}
       />
-
     </Tab.Navigator>
   );
 }
@@ -171,7 +171,7 @@ export const CustomTabBarIcon = ({ focused, icon, theme }) => (
 export default function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Tabs" component={TabNavigator}/>
+      <Stack.Screen name="Tabs" component={TabNavigator} />
       <Stack.Screen name="Expense" component={ExpensePage} />
       <Stack.Screen name="Income" component={IncomePage} />
     </Stack.Navigator>
@@ -180,7 +180,7 @@ export default function RootNavigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 110,
+    height: 100,
     backgroundColor: "#ffffff",
     borderTopWidth: 0,
     position: "absolute",
